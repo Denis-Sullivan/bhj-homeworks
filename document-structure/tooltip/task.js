@@ -1,31 +1,31 @@
-let tooltip = document.createElement('div');
-tooltip.classList.add('tooltip');
+const linksHasTooltip = Array.from(document.getElementsByClassName('has-tooltip'));
+let linkRect;
+let linkHeight;
 
-linksHasTooltip = Array.from(document.getElementsByClassName('has-tooltip'));
+linksHasTooltip.forEach((el) => {
+    el.addEventListener('click', showTooltip);
+});
 
 function showTooltip() {
-    let tooltipText = this.title;
+  event.preventDefault();
+  const hintToDelete = document.querySelector('.tooltip');
+    if (hintToDelete) {
+        if (this.getAttribute('title') === hintToDelete.textContent) {
+            hintToDelete.remove();
+            return
+        }
+        hintToDelete.remove();
+    }
 
-    if (tooltip.classList.contains('tooltip_active')) {
-        tooltip.classList.toggle('tooltip_active');
-    };
+    const hint = document.createElement('div');
+    hint.classList.add('tooltip');
 
-    tooltip.innerText = tooltipText;
+    linkRect = this.getBoundingClientRect();
+    linkHeight = this.getBoundingClientRect().bottom - this.getBoundingClientRect().top;
+    hint.style.top = linkRect.top + linkHeight + 'px';
+    hint.style.left = linkRect.left + 'px';
+    hint.style.display = 'block';
+    hint.textContent = this.getAttribute('title');
 
-    let coordinates = this.getBoundingClientRect();
-    tooltip.style.left = `${coordinates.x}px`;
-    tooltip.style.top = `${coordinates.y + 20}px`;
-    console.log(tooltip);
-    console.log(coordinates.x);
-    console.log(coordinates.y);
-
-    tooltip.classList.toggle('tooltip_active');
-
-    this.appendChild(tooltip);
-
-    event.preventDefault();
-};
-
-for (let link of linksHasTooltip) {
-    link.addEventListener('click', showTooltip);
+    document.body.append(hint);
 };
